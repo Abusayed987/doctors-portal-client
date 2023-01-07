@@ -24,7 +24,9 @@ const SignUp = () => {
                     displayName: data.name
                 }
                 updateUser(userInfo)
-                    .then(() => { })
+                    .then(() => {
+                        navigate(from, { replace: true })
+                    })
                     .catch((err) => {
                         console.error(err)
                     })
@@ -39,7 +41,7 @@ const SignUp = () => {
         googleLogin()
             .then(result => {
                 const user = result.user;
-                navigate(from, { replace: true })
+                // navigate(from, { replace: true })
             })
             .then(err => console.error(err))
 

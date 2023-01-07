@@ -5,12 +5,12 @@ import BookingModal from '../BookingModal';
 import AvailableService from './AvailableService';
 
 const AvailableServices = ({ selectedDate }) => {
-
-    const [treatment, setTreatment] = useState(null)
+    const [treatment, setTreatment] = useState(null);
+    const date = format(selectedDate, "PP");
 
     const { data: appointmentOptions = [] } = useQuery({
-        queryKey: 'appointmentOptions',
-        queryFn: () => fetch("http://localhost:4000/appointmentOptions").then(res => res.json())
+        queryKey: ['appointmentOptions', date],
+        queryFn: () => fetch(`http://localhost:4000/appointmentOptions?date=${date}`).then(res => res.json())
     })
 
 
