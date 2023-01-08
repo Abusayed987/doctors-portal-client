@@ -25,7 +25,7 @@ const SignUp = () => {
                 }
                 updateUser(userInfo)
                     .then(() => {
-                        navigate(from, { replace: true })
+                        saveUserToDb(data.name, data.email)
                     })
                     .catch((err) => {
                         console.error(err)
@@ -37,6 +37,7 @@ const SignUp = () => {
                 toast.error(err.message)
             })
     }
+
     const handleGoogleLogin = () => {
         googleLogin()
             .then(result => {
@@ -45,6 +46,22 @@ const SignUp = () => {
             })
             .then(err => console.error(err))
 
+    }
+
+    const saveUserToDb = (name, email) => {
+        const user = { name, email };
+        fetch("http://localhost:4000/users", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+            .then((res) => res.json())
+            .then(data => {
+                console.log("save user", data);
+                navigate(from, { replace: true })
+            })
     }
 
     return (
