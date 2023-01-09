@@ -25,7 +25,7 @@ const MyAppointment = () => {
             </div>
             <div>
                 <div className="overflow-x-auto mt-4">
-                    <table className="table w-full">
+                    <table className="table w-full table-zebra">
                         <thead>
                             <tr>
                                 <th></th>
@@ -38,7 +38,7 @@ const MyAppointment = () => {
                         <tbody>
                             {
                                 bookings.map((booking, i) => <tr
-                                    className="hover"
+
                                     key={booking._id}>
                                     <th>{i + 1}</th>
                                     <td>{user.displayName}</td>

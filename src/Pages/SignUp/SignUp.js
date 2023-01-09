@@ -8,8 +8,8 @@ import useToken from '../../hooks/useToken';
 
 const SignUp = () => {
     const { createUser, googleLogin, updateUser } = useContext(AuthContext);
-    const [createdUserEmail, setCreatedUserEmail] = useState('')
-    const [token] = useToken(createdUserEmail)
+    const [createdUserEmail, setCreatedUserEmail] = useState('');
+    const [token] = useToken(createdUserEmail);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const navigate = useNavigate();
@@ -58,19 +58,16 @@ const SignUp = () => {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log(data);
                 setCreatedUserEmail(email)
-
             })
     }
-
 
 
     const handleGoogleLogin = () => {
         googleLogin()
             .then(result => {
                 const user = result.user;
-                // navigate(from, { replace: true })
+                navigate(from, { replace: true })
             })
             .then(err => console.error(err))
 
