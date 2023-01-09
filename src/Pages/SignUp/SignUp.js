@@ -1,18 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthProvider';
+import useToken from '../../hooks/useToken';
+
 
 const SignUp = () => {
-    const { createUser, googleLogin, updateUser } = useContext(AuthContext)
-
+    const { createUser, googleLogin, updateUser } = useContext(AuthContext);
+    const [createdUserEmail, setCreatedUserEmail] = useState('')
+    const [token] = useToken(createdUserEmail)
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
 
+    if (token) {
+        navigate(from, { replace: true })
+    }
 
     const handleSignUp = data => {
         // console.log(data);
@@ -25,6 +31,7 @@ const SignUp = () => {
                 }
                 updateUser(userInfo)
                     .then(() => {
+                        //for save db
                         saveUserToDb(data.name, data.email)
                     })
                     .catch((err) => {
@@ -38,15 +45,7 @@ const SignUp = () => {
             })
     }
 
-    const handleGoogleLogin = () => {
-        googleLogin()
-            .then(result => {
-                const user = result.user;
-                // navigate(from, { replace: true })
-            })
-            .then(err => console.error(err))
 
-    }
 
     const saveUserToDb = (name, email) => {
         const user = { name, email };
@@ -59,10 +58,24 @@ const SignUp = () => {
         })
             .then((res) => res.json())
             .then(data => {
-                console.log("save user", data);
-                navigate(from, { replace: true })
+                console.log(data);
+                setCreatedUserEmail(email)
+
             })
     }
+
+
+
+    const handleGoogleLogin = () => {
+        googleLogin()
+            .then(result => {
+                const user = result.user;
+                // navigate(from, { replace: true })
+            })
+            .then(err => console.error(err))
+
+    }
+
 
     return (
         <div className='flex justify-center items-center h-[600px] '>
