@@ -61,7 +61,7 @@ const AllUsers = () => {
                                                 className='btn btn-primary btn-xs text-white'>Make Admin ?</button>
                                             :
                                             <button
-                                                className=' rounded-sm btn-success btn-xs text-white'>Admin</button>
+                                                className='cursor-default rounded-sm btn-success btn-xs text-white'>Admin</button>
                                         }
                                     </td>
                                     <td><button className='btn btn-error btn-xs text-white'>Delete</button></td>

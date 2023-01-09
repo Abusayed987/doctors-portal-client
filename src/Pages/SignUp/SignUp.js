@@ -46,7 +46,6 @@ const SignUp = () => {
     }
 
 
-
     const saveUserToDb = (name, email) => {
         const user = { name, email };
         fetch("http://localhost:4000/users", {
@@ -134,6 +133,7 @@ const SignUp = () => {
 
         </div>
     );
+
 };
 
 export default SignUp;
