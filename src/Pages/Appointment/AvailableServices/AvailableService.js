@@ -1,15 +1,16 @@
 import React from 'react';
 
 const AvailableService = ({ availableService, setTreatment }) => {
-    const { name, slots } = availableService;
+    const { name, slots, price } = availableService;
     return (
         <div className="card w-80  bg-base-100 shadow-lg">
             <div className="card-body items-center ">
                 <h2 className=" text-xl  text-secondary ">{name}</h2>
                 <p> {slots.length > 0 ? slots[0] : 'Try Another'}</p>
-                <p className=' mb-5 text-sm  '>
+                <p className='text-sm  '>
                     {slots.length} {slots.length > 1 ? "Spaces" : "Space"} Available
                 </p>
+                <p><small>Price: ${price}</small></p>
                 <label
                     htmlFor="booking-modal"
                     disabled={!slots.length}
