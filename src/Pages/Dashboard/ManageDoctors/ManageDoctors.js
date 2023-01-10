@@ -9,11 +9,7 @@ const ManageDoctors = () => {
         setDeletingDoctor(null)
     }
 
-    const handleDeleteDoctor = doctor => {
-        console.log(doctor);
-    }
-
-    const { data: doctors = [] } = useQuery({
+    const { data: doctors = [], refetch } = useQuery({
         queryKey: ['doctors'],
         queryFn: async () => {
             const res = await fetch('http://localhost:4000/doctors');
@@ -21,6 +17,21 @@ const ManageDoctors = () => {
             return data;
         }
     })
+
+    const handleDeleteDoctor = doctor => {
+        fetch(`http://localhost:4000/doctors/${doctor._id}`, {
+            method: 'DELETE',
+            headers: {
+                authorization: `bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    refetch()
+                }
+            })
+    }
 
     return (
         <div className=' w-11/12 '>
