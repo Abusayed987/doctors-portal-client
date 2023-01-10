@@ -32,9 +32,8 @@ const AddDoctor = () => {
         })
             .then(res => res.json())
             .then(imgData => {
-                console.log('success', imgData);
                 if (imgData.success) {
-                    console.log(imgData.data.url);
+
                     // Save Doctor info in the database
                     const doctor = {
                         name: data.name,
@@ -52,7 +51,8 @@ const AddDoctor = () => {
                     })
                         .then(res => res.json())
                         .then(data => {
-                            toast.success(`Doctor ${data.name} added successfully`)
+
+                            toast.success(`Doctor ${doctor.name} added successfully`)
                             navigate('/dashboard/manageDoctors')
                         })
                 }
