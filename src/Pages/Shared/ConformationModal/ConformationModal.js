@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConformationModal = ({ tittle, message, closeModal, successAction, modalData }) => {
+const ConformationModal = ({ tittle, message, closeModal, successAction, modalData, successBtnName }) => {
     return (
         <div>
             <input type="checkbox" id="conformation-modal" className="modal-toggle" />
@@ -12,7 +12,7 @@ const ConformationModal = ({ tittle, message, closeModal, successAction, modalDa
                         <label
                             onClick={() => successAction(modalData)}
                             htmlFor="conformation-modal"
-                            className="btn-sm btn btn-outline btn-error">Delete</label>
+                            className="btn-sm btn  btn-error">{successBtnName}</label>
 
                         <button onClick={closeModal} className='btn btn-sm btn-outline'> Cancel</button>
                     </div>

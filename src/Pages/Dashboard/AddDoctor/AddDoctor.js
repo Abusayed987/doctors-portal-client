@@ -11,7 +11,7 @@ const AddDoctor = () => {
     const navigate = useNavigate()
 
 
-    const { data: specialties = [], isLoading } = useQuery({
+    const { data: specialties = [] } = useQuery({
         queryKey: ["specialty"],
         queryFn: async () => {
             const res = await fetch("http://localhost:4000/appointmentSpecialty");
@@ -51,7 +51,6 @@ const AddDoctor = () => {
                     })
                         .then(res => res.json())
                         .then(data => {
-
                             toast.success(`Doctor ${doctor.name} added successfully`)
                             navigate('/dashboard/manageDoctors')
                         })

@@ -20,7 +20,6 @@ const AllUsers = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 if (data.acknowledged) {
                     refetch()
                     toast.success('Admin Added ')

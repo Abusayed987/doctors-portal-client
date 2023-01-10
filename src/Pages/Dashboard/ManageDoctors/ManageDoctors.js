@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import ConformationModal from '../../Shared/ConformationModal/ConformationModal';
 
 const ManageDoctors = () => {
@@ -9,10 +10,15 @@ const ManageDoctors = () => {
         setDeletingDoctor(null)
     }
 
-    const { data: doctors = [], refetch } = useQuery({
+
+    const { data: doctors = [], refetch, isLoading } = useQuery({
         queryKey: ['doctors'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:4000/doctors');
+            const res = await fetch('http://localhost:4000/doctors', {
+                headers: {
+                    authorization: `bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
             const data = await res.json();
             return data;
         }
@@ -22,13 +28,14 @@ const ManageDoctors = () => {
         fetch(`http://localhost:4000/doctors/${doctor._id}`, {
             method: 'DELETE',
             headers: {
-                authorization: `bearer ${localStorage.getItem('accessToken')}`
+                authorization: `bearer ${localStorage.getItem("accessToken")}`
             }
         })
             .then(res => res.json())
             .then(data => {
                 if (data.acknowledged) {
                     refetch()
+                    toast.success(`${doctor.name} Deleted successfully`)
                 }
             })
     }
@@ -82,6 +89,7 @@ const ManageDoctors = () => {
                     message={`If you delete ${deletingDoctor.name}, it cannot be recovered .`}
                     closeModal={closeModal}
                     successAction={handleDeleteDoctor}
+                    successBtnName="Delete"
                     modalData={deletingDoctor}
                 ></ConformationModal>
             }
