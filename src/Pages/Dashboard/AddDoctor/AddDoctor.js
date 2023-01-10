@@ -2,9 +2,15 @@ import { async } from '@firebase/util';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AddDoctor = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const imageHostKey = process.env.REACT_APP_imgbb_key;
+    const navigate = useNavigate()
+
+
     const { data: specialties = [], isLoading } = useQuery({
         queryKey: ["specialty"],
         queryFn: async () => {
@@ -13,16 +19,49 @@ const AddDoctor = () => {
             return data
         }
     })
-    console.log(specialties);
 
     const handleAddDoctor = data => {
-        console.log(data);
+        const image = data.image[0];
+        const formData = new FormData();
+        formData.append('image', image);
 
+        const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imgData => {
+                console.log('success', imgData);
+                if (imgData.success) {
+                    console.log(imgData.data.url);
+                    // Save Doctor info in the database
+                    const doctor = {
+                        name: data.name,
+                        email: data.email,
+                        specialty: data.specialty,
+                        image: imgData.data.url
+                    }
+                    fetch('http://localhost:4000/doctors', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(doctor)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            toast.success(`Doctor ${data.name} added successfully`)
+                            navigate('/dashboard/manageDoctors')
+                        })
+                }
+            })
     }
     return (
         <div className=' w-11/12 '>
             <div className=''>
-                <h2 className='text-2xl'>Add A Doctor</h2>
+                <h2 className='text-2xl ml-2'>Add A Doctor</h2>
             </div>
             <div className=' w-96 p-7 shadow-md'>
                 <form onSubmit={handleSubmit(handleAddDoctor)}>
@@ -56,8 +95,7 @@ const AddDoctor = () => {
                         <label className="label"> <span className="label-text">Specialty</span></label>
 
                         <select
-                            {...register("specialty"
-                            )}
+                            {...register("specialty")}
                             className="select input-bordered w-full max-w-xs">
                             {
                                 specialties.map(specialty => <option
